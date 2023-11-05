@@ -81,13 +81,13 @@ TDynamicList<TLexeme> to_postfix(const TDynamicList<TLexeme>& lexemes)
                 const char current = lexeme.value.as_char();
                 while (!stack.empty())
                 {
-                    TLexeme stored = stack.pop_element();
+                    TLexeme& stored = stack.top();
                     if (Operators::priority(current) > Operators::priority(stored.value.as_char()))
                     {
-                        stack.push(stored);
                         break;
                     }
                     postfix.push_back(stored);
+                    stack.pop();
                 }
                 stack.push(lexeme);
                 break;
