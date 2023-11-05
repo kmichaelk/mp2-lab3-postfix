@@ -43,8 +43,8 @@ public:
 
     [[nodiscard]]
     double calculate(
-            const std::map<std::string, double>& values,
-            const std::map<std::string, std::shared_ptr<TArithmeticExpressionFunction>>& functions) const;
+            const std::map<std::string, double>& values = {},
+            const std::map<std::string, std::shared_ptr<TArithmeticExpressionFunction>>& functions = {}) const;
 
     static const char POSTFIX_LEXEME_SEPARATOR = ' ';
 };

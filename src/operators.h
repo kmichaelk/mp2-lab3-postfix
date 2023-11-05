@@ -1,6 +1,7 @@
 #ifndef __OPERATORS_H__
 #define __OPERATORS_H__
 
+#include "postfix.h"
 #include <map>
 #include <functional>
 
@@ -16,6 +17,7 @@ public:
     Operators() = delete;
 
     static const std::map<char, TArithmeticOperator> LIST;
+    static const std::map<std::string, std::shared_ptr<TArithmeticExpressionFunction>> STD_FUNCTIONS;
 
     static int priority(const char c)
     {

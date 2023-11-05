@@ -185,7 +185,12 @@ double TArithmeticExpression::calculate(const std::map<std::string, double>& val
     if (!require_keys(values, variables))
         throw std::invalid_argument("Not all variables values are present");
 
-    if (!require_keys(functions, func_names))
+    auto funcs = Operators::STD_FUNCTIONS;
+    for (const auto &item : functions) {
+        funcs[item.first] = item.second;
+    }
+
+    if (!require_keys(funcs, func_names))
         throw std::invalid_argument("Not all function implementations are present");
 
     TStack<double> stack;
@@ -198,7 +203,7 @@ double TArithmeticExpression::calculate(const std::map<std::string, double>& val
                 break;
             }
             case TLexeme::Type::Function: {
-                stack.push(functions.at(lexeme.value.as_string())->execute(stack.pop_element()));
+                stack.push(funcs.at(lexeme.value.as_string())->execute(stack.pop_element()));
                 break;
             }
             case TLexeme::Type::Variable:
