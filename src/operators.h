@@ -9,6 +9,11 @@ struct TArithmeticOperator
 {
     int priority;
     std::function<double (double, double)> handler;
+    enum class Type {
+        Standard,
+        UnaryPrefix,
+        UnaryPostfix
+    } type = Type::Standard;
 };
 
 class Operators

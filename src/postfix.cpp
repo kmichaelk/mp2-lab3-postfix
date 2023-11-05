@@ -78,7 +78,17 @@ TDynamicList<TLexeme> to_postfix(const TDynamicList<TLexeme>& lexemes)
                 break;
             }
             case TLexeme::Type::Operator: {
-                const char current = lexeme.value.as_char();
+                char current = lexeme.value.as_char();
+                if (current == '-' && (stack.empty() || stack.top().type == TLexeme::Type::Bracket)) {
+                    current = '~';
+                }
+
+                const auto& op_type = Operators::LIST.at(current).type;
+                if (op_type == TArithmeticOperator::Type::UnaryPrefix)
+                {
+                    postfix.push_back(TLexeme { TLexeme::Type::Number });
+                }
+
                 while (!stack.empty())
                 {
                     const TLexeme& stored = stack.top();
@@ -90,6 +100,11 @@ TDynamicList<TLexeme> to_postfix(const TDynamicList<TLexeme>& lexemes)
                     stack.pop();
                 }
                 stack.push(lexeme);
+
+                if (op_type == TArithmeticOperator::Type::UnaryPostfix)
+                {
+                    postfix.push_back(TLexeme { TLexeme::Type::Number });
+                }
                 break;
             }
             case TLexeme::Type::Function: {

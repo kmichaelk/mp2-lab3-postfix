@@ -9,6 +9,19 @@ private:
     T *pMem;
     size_t capacity;
     size_t length;
+
+    void expand_if_needed()
+    {
+        if (length < capacity) return;
+
+        //
+        const size_t new_capacity = capacity * 2;
+        //
+
+        capacity = new_capacity;
+        TDynamicList<T> tmp(*this);
+        swap(*this, tmp);
+    }
 public:
     explicit
     TDynamicList(size_t initial_capacity = 8)
@@ -59,21 +72,24 @@ public:
 
     void push_back(const T& element)
     {
-        if (length == capacity)
-        {
-            //
-            const size_t new_capacity = capacity * 2;
-            //
-
-            capacity = new_capacity;
-            TDynamicList<T> tmp(*this);
-            swap(*this, tmp);
-        }
+        expand_if_needed();
         pMem[length++] = element;
     }
     void push_back(T&& element)
     {
         push_back(element);
+    }
+
+    void insert(size_t idx, const T& element)
+    {
+        expand_if_needed();
+        std::copy(pMem + idx, pMem + length, pMem + idx + 1);
+        pMem[idx] = element;
+        length++;
+    }
+    void insert(size_t idx, T&& element)
+    {
+        insert(idx, element);
     }
 
     void remove(size_t idx)
