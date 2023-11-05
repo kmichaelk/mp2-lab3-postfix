@@ -79,7 +79,7 @@ TDynamicList<TLexeme> to_postfix(const TDynamicList<TLexeme>& lexemes)
             }
             case TLexeme::Type::Operator: {
                 char current = lexeme.value.as_char();
-                if (current == '-' && (stack.empty() || stack.top().type == TLexeme::Type::Bracket)) {
+                if (current == '-' && (postfix.empty() || (!stack.empty() && stack.top().type == TLexeme::Type::Bracket))) {
                     current = '~';
                 }
 
