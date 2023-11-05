@@ -7,7 +7,7 @@
 #define _STACK_STR(x) #x
 #define _STACK_EXPAND(x) _STACK_STR(x)
 
-const int MAX_STACK_SIZE = 1000;
+const size_t MAX_STACK_SIZE = 1000;
 
 template<typename T>
 class TStack
