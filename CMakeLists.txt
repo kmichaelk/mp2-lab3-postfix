@@ -4,8 +4,8 @@ set(CMAKE_CXX_STANDARD 11)
 set(PROJECT_NAME postfix)
 project(${PROJECT_NAME})
 
-set(PROJ_LIBARY "${PROJECT_NAME}")
-set(PROJ_TESTS  "test_${PROJECT_NAME}")
+set(PROJ_LIBRARY "${PROJECT_NAME}")
+set(PROJ_TESTS   "test_${PROJECT_NAME}")
 
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include" gtest)
 

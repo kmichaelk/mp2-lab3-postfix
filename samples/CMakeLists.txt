@@ -8,7 +8,7 @@ foreach(sample_filename ${samples_list})
 
     # Add and configure executable file to be produced
     add_executable(${sample} ${sample_filename})
-    target_link_libraries(${sample} ${PROJ_LIBARY})
+    target_link_libraries(${sample} ${PROJ_LIBRARY})
     set_target_properties(${sample} PROPERTIES
             OUTPUT_NAME "${sample}"
             PROJECT_LABEL "${sample}"

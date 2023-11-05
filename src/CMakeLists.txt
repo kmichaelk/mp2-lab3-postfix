@@ -1,4 +1,4 @@
-set(target ${PROJ_LIBARY})
+set(target ${PROJ_LIBRARY})
 
 file(GLOB hdrs "*.h*")
 file(GLOB srcs "*.cpp")
