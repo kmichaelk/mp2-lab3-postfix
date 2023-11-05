@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <string>
 #include <functional>
+#include <memory>
 #include <map>
 #include "lexeme.h"
 #include "list.h"

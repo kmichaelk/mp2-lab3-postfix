@@ -1,6 +1,5 @@
 #include "lexeme.h"
 #include <stdexcept>
-#include <charconv>
 
 TLexemeValue::TLexemeValue(std::string str)
         : str(std::move(str))
@@ -34,9 +33,11 @@ bool TLexemeValue::reinterpret_as_number()
 {
     if (!str.empty())
     {
-        auto [p, ec] = std::from_chars(str.data(), str.data() + str.size(), numeric);
-        if (ec != std::errc())
+        try {
+            numeric = std::stod(str);
+        } catch (...) {
             return false;
+        }
 
         str.resize(0);
     }

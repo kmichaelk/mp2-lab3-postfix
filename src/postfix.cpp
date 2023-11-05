@@ -129,7 +129,7 @@ TDynamicList<TLexeme> to_postfix(const TDynamicList<TLexeme>& lexemes)
 
     return postfix;
 }
-#include<iostream>
+
 TArithmeticExpression::TArithmeticExpression(const std::string& infix)
     : infix(infix)
     , tokens(to_postfix(tokenize(infix)))
