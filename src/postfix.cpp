@@ -94,7 +94,7 @@ TDynamicList<TLexeme> to_postfix(const TDynamicList<TLexeme>& lexemes)
                 while (!stack.empty())
                 {
                     const TLexeme& stored = stack.top();
-                    if (Operators::priority(current) > Operators::priority(stored.value.as_char()))
+                    if (stored.type != TLexeme::Type::Operator || Operators::priority(current) > Operators::priority(stored.value.as_char()))
                     {
                         break;
                     }

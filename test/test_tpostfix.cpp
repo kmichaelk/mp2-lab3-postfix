@@ -108,3 +108,8 @@ TEST(TArithmeticExpression, can_pass_variable_to_function)
 
     EXPECT_EQ(funcs["func"]->execute(a), result);
 }
+
+TEST(TArithmeticExpression, unary_minus_works_with_variables_and_functions)
+{
+    ASSERT_NO_THROW(TArithmeticExpression expr("-a+b*(-func(a))"));
+}
