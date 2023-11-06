@@ -29,7 +29,7 @@ struct TLexeme {
 
         Bracket
     } type;
-    TLexemeValue value = TLexemeValue("0");
+    TLexemeValue value = TLexemeValue("");
 };
 
 #endif // __LEXEME_H__
