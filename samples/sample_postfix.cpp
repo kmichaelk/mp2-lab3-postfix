@@ -23,6 +23,7 @@ string get_postfix_as_string(const TArithmeticExpression& expr)
 int main()
 {
     setlocale(LC_ALL, "Russian");
+    setlocale(LC_NUMERIC, "en_US.UTF-8");
     /////
 
     string infix;
