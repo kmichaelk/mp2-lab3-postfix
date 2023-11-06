@@ -124,7 +124,15 @@ TEST(TArithmeticExpression, can_pass_variable_to_function)
 
 TEST(TArithmeticExpression, unary_minus_works_with_variables_and_functions)
 {
-    ASSERT_NO_THROW(TArithmeticExpression expr("-a+b*(-func(a))"));
+    int a = 24, b = 10;
+    std::map<std::string, std::shared_ptr<TArithmeticExpressionFunction>> funcs = {
+        { "func", std::make_shared<TExplicitArithmeticExpressionFunction>(TArithmeticExpression("42+x"))},
+    };
+
+    TArithmeticExpression expr("-a+b*(-func(a))");
+    double result = expr.calculate({ { "a", a }, { "b", b } }, funcs);
+
+    EXPECT_EQ(-a + b*(-funcs["func"]->execute(a)), result);
 }
 
 TEST(TArithmeticExpression, can_calculate_expressions_with_constants)
