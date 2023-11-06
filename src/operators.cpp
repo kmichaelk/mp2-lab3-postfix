@@ -6,8 +6,8 @@ const std::map<char, TArithmeticOperator> Operators::LIST = {
         { '-', { 2, std::minus<>{} } },
         { '*', { 3, std::multiplies<>{} } },
         { '/', { 3, std::divides<>{} } },
-        { '~', { 1, [](double _, double x) { return -x; }, TArithmeticOperator::Type::UnaryPrefix } },
-        { '!', { 1, [](double x, double _) {
+        { '~', { 4, [](double _, double x) { return -x; }, TArithmeticOperator::Type::UnaryPrefix } },
+        { '!', { 4, [](double x, double _) {
             const long lim = (long)x;
             double res = 1;
             for (int i=1; i <= lim; ++i)
