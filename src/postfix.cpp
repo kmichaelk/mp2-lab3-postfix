@@ -58,6 +58,7 @@ TDynamicList<TLexeme> to_postfix(const TDynamicList<TLexeme>& lexemes)
     TDynamicList<TLexeme> postfix(lexemes.size());
     TStack<TLexeme> stack;
 
+    size_t i = 0;
     for (const auto& lexeme : lexemes)
     {
         switch (lexeme.type)
@@ -79,7 +80,8 @@ TDynamicList<TLexeme> to_postfix(const TDynamicList<TLexeme>& lexemes)
             }
             case TLexeme::Type::Operator: {
                 char current = lexeme.value.as_char();
-                if (current == '-' && (postfix.empty() || (!stack.empty() && stack.top().type == TLexeme::Type::Bracket))) {
+                if (current == '-' && (postfix.empty() || ((!stack.empty() && stack.top().type == TLexeme::Type::Bracket)
+                        && lexemes[i - 1].value.as_char() != ')'))) {
                     current = '~';
                 }
 
@@ -120,6 +122,8 @@ TDynamicList<TLexeme> to_postfix(const TDynamicList<TLexeme>& lexemes)
                 throw parse_error("Unimplemented");
             }
         }
+
+        i++;
     }
 
     while (!stack.empty())
