@@ -17,6 +17,9 @@ const std::map<char, TArithmeticOperator> Operators::LIST = {
             return res;
         }, TArithmeticOperator::Type::UnaryPostfix } },
 };
+const std::map<std::string, double> Operators::CONSTANTS = {
+        { "pi", 3.14159 }
+};
 const std::map<std::string, std::shared_ptr<TArithmeticExpressionFunction>> Operators::STD_FUNCTIONS = {
         { "sin", std::make_shared<TComputedArithmeticExpressionFunction>([](double x) { return sin(x); })},
         { "cos", std::make_shared<TComputedArithmeticExpressionFunction>([](double x) { return cos(x); }) },

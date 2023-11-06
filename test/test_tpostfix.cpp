@@ -6,7 +6,7 @@ TEST(TArithmeticExpression, can_parse_complex_expressions)
     ASSERT_NO_THROW(TArithmeticExpression expr("((a+(b*c)+((4*d)+7)/sin(8*e))+func(2*a))*2"));
 }
 
-TEST(TArithmeticExpression, can_calculate_expressions_with_constants)
+TEST(TArithmeticExpression, can_calculate_expressions_with_numbers)
 {
     TArithmeticExpression expr("1+2");
     EXPECT_EQ(1+2, expr.calculate());
@@ -96,7 +96,6 @@ TEST(TArithmeticExpression, can_invoke_explicit_function_call)
     EXPECT_EQ(funcs["func"]->execute(123), result);
 }
 
-
 TEST(TArithmeticExpression, can_invoke_polymorphic_functions)
 {
     std::map<std::string, std::shared_ptr<TArithmeticExpressionFunction>> funcs = {
@@ -126,4 +125,12 @@ TEST(TArithmeticExpression, can_pass_variable_to_function)
 TEST(TArithmeticExpression, unary_minus_works_with_variables_and_functions)
 {
     ASSERT_NO_THROW(TArithmeticExpression expr("-a+b*(-func(a))"));
+}
+
+TEST(TArithmeticExpression, can_calculate_expressions_with_constants)
+{
+    TArithmeticExpression expr("cos(pi)");
+    double result = expr.calculate();
+
+    EXPECT_EQ(true, (result - (-1)) <= 0.01);
 }

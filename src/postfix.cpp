@@ -74,7 +74,7 @@ TDynamicList<TLexeme> to_postfix(const TDynamicList<TLexeme>& lexemes)
                         stack.pop();
                     }
                     stack.pop();
-                    
+
                     if (!stack.empty() && stack.top().type == TLexeme::Type::Function)
                     {
                         postfix.push_back(stack.pop_element());
@@ -156,7 +156,10 @@ TArithmeticExpression::TArithmeticExpression(const std::string& infix)
                 break;
             }
             case TLexeme::Type::Variable: {
-                variables.push_back(token.value.as_string());
+                const std::string& name = token.value.as_string();
+                if (!Operators::has_constant(name)) {
+                    variables.push_back(name);
+                }
                 break;
             }
             case TLexeme::Type::Number: {
@@ -207,15 +210,20 @@ bool require_keys(const std::map<K, V>& map, const TDynamicList<K>& keys)
     return std::all_of(keys.begin(), keys.end(), [&map](K key) { return map.find(key) != map.end(); });
 }
 
-double TArithmeticExpression::calculate(const std::map<std::string, double>& values,
-                                        const std::map<std::string, std::shared_ptr<TArithmeticExpressionFunction>>& functions
+double TArithmeticExpression::calculate(const std::map<std::string, double>& _values,
+                                        const std::map<std::string, std::shared_ptr<TArithmeticExpressionFunction>>& _functions
                                         ) const {
+
+    auto values = Operators::CONSTANTS;
+    for (const auto &item : _values) {
+        values[item.first] = item.second;
+    }
 
     if (!require_keys(values, variables))
         throw std::invalid_argument("Not all variables values are present");
 
     auto funcs = Operators::STD_FUNCTIONS;
-    for (const auto &item : functions) {
+    for (const auto &item : _functions) {
         funcs[item.first] = item.second;
     }
 

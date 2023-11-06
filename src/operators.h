@@ -22,11 +22,17 @@ public:
     Operators() = delete;
 
     static const std::map<char, TArithmeticOperator> LIST;
+    static const std::map<std::string, double> CONSTANTS;
     static const std::map<std::string, std::shared_ptr<TArithmeticExpressionFunction>> STD_FUNCTIONS;
 
     static bool supports_function(const std::string& name)
     {
         return STD_FUNCTIONS.find(name) != STD_FUNCTIONS.end();
+    }
+
+    static bool has_constant(const std::string& name)
+    {
+        return CONSTANTS.find(name) != CONSTANTS.end();
     }
 
     static int priority(const char c)
