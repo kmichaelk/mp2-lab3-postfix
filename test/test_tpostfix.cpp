@@ -75,7 +75,7 @@ TEST(TArithmeticExpression, can_calculate_complex_expressions_with_unary_operato
 TEST(TArithmeticExpression, can_invoke_computed_function_call)
 {
     std::map<std::string, std::shared_ptr<TArithmeticExpressionFunction>> funcs = {
-            { "func", std::make_shared<TComputedArithmeticExpressionFunction>([](double x) { return sin(x); })},
+        { "func", std::make_shared<TComputedArithmeticExpressionFunction>([](double x) { return sin(x); })},
     };
 
     TArithmeticExpression expr("func(123)");
@@ -87,7 +87,7 @@ TEST(TArithmeticExpression, can_invoke_computed_function_call)
 TEST(TArithmeticExpression, can_invoke_explicit_function_call)
 {
     std::map<std::string, std::shared_ptr<TArithmeticExpressionFunction>> funcs = {
-            { "func", std::make_shared<TExplicitArithmeticExpressionFunction>(TArithmeticExpression("42+x"))},
+        { "func", std::make_shared<TExplicitArithmeticExpressionFunction>(TArithmeticExpression("42+x"))},
     };
 
     TArithmeticExpression expr("func(123)");
@@ -96,11 +96,25 @@ TEST(TArithmeticExpression, can_invoke_explicit_function_call)
     EXPECT_EQ(funcs["func"]->execute(123), result);
 }
 
+
+TEST(TArithmeticExpression, can_invoke_polymorphic_functions)
+{
+    std::map<std::string, std::shared_ptr<TArithmeticExpressionFunction>> funcs = {
+        { "computed", std::make_shared<TComputedArithmeticExpressionFunction>([](double x) { return 42 * x; })},
+        { "explicit", std::make_shared<TExplicitArithmeticExpressionFunction>(TArithmeticExpression("42+x"))},
+    };
+
+    TArithmeticExpression expr("computed(123) + explicit(321)");
+    double result = expr.calculate({}, funcs);
+
+    EXPECT_EQ(funcs["computed"]->execute(123) + funcs["explicit"]->execute(321), result);
+}
+
 TEST(TArithmeticExpression, can_pass_variable_to_function)
 {
     int a = 24;
     std::map<std::string, std::shared_ptr<TArithmeticExpressionFunction>> funcs = {
-            { "func", std::make_shared<TExplicitArithmeticExpressionFunction>(TArithmeticExpression("42+x"))},
+        { "func", std::make_shared<TExplicitArithmeticExpressionFunction>(TArithmeticExpression("42+x"))},
     };
 
     TArithmeticExpression expr("func(a)");
