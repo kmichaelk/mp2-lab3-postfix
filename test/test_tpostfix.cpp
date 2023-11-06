@@ -142,3 +142,11 @@ TEST(TArithmeticExpression, can_calculate_expressions_with_constants)
 
     EXPECT_EQ(true, (result - (-1)) <= 0.01);
 }
+
+TEST(TArithmeticExpression, can_handle_deep_unary_minus)
+{
+    TArithmeticExpression expr("(((3-3)))");
+    double result = expr.calculate();
+
+    EXPECT_EQ(3-3, result);
+}
