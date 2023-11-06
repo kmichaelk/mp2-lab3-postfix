@@ -22,27 +22,39 @@ string get_postfix_as_string(const TArithmeticExpression& expr)
 
 int main()
 {
-    string raw = "(a+(b*c)+((4*j)+7)/sin(8*x))+func(2*a)";
-    TArithmeticExpression expr(raw);
-
     setlocale(LC_ALL, "Russian");
-    //cout << "Введите арифметическое выражение: ";
-    //cin >> expression;
-    //cout << expression << endl;
+    /////
+
+    string infix;
+    cout << "Введите арифметическое выражение: ";
+    cin >> infix;
+    cout << endl;
+
+    TArithmeticExpression expr(infix);
     cout << "Арифметическое выражение: " << expr.get_infix() << endl;
     cout << "Постфиксная форма: '" << get_postfix_as_string(expr) << "'" << endl;
+    cout << endl;
 
-    double res = expr.calculate({
-                                        { "a", 5 },
-                                        { "b", 7 },
-                                        { "c", 9 },
-                                        { "j", 13 },
-                                        { "x", 54 },
-        },  {
-            { "sin", std::make_shared<TComputedArithmeticExpressionFunction>([](double x) { return sin(x); })},
-            { "func", std::make_shared<TExplicitArithmeticExpressionFunction>(TArithmeticExpression("5*x"))},
-    });
-    cout << res << endl;
+    auto variables = expr.get_variables();
+    std::map<std::string, double> values;
+    for (const auto& var : variables)
+    {
+        cout << " Введите значение для '" << var << "': ";
+        cin >> values[var];
+    }
+    //
+    auto func_names = expr.get_functions();
+    std::map<std::string, std::shared_ptr<TArithmeticExpressionFunction>> functions;
+    for (const auto& fun : func_names)
+    {
+        cout << " Введите формулу для '" << fun << "': ";
+        cin >> infix;
+        functions[fun] = std::make_shared<TExplicitArithmeticExpressionFunction>(TArithmeticExpression(infix));
+    }
+    cout << endl;
+
+    double res = expr.calculate(values, functions);
+    cout << "Результат: " << res << endl;
 
     return 0;
 }
