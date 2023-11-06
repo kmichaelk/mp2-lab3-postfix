@@ -55,7 +55,7 @@ TDynamicList<TLexeme> tokenize(const std::string& infix)
 TDynamicList<TLexeme> to_postfix(const TDynamicList<TLexeme>& lexemes)
 {
     TDynamicList<TLexeme> postfix(lexemes.size());
-    TStack<TLexeme> stack;
+    TStack<TLexeme> stack((lexemes.size() / 2) + 1);
 
     size_t i = 0;
     for (const auto& lexeme : lexemes)
@@ -229,7 +229,7 @@ double TArithmeticExpression::calculate(const std::map<std::string, double>& _va
     if (!require_keys(funcs, func_names))
         throw std::invalid_argument("Not all function implementations are present");
 
-    TStack<double> stack;
+    TStack<double> stack((tokens.size() / 2) + 1);
     for (const auto& lexeme : tokens)
     {
         switch (lexeme.type)
