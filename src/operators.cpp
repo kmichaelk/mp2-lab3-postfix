@@ -7,6 +7,7 @@ const std::map<char, TArithmeticOperator> Operators::LIST = {
         { '*', { 3, std::multiplies<>{} } },
         { '/', { 3, std::divides<>{} } },
         { '%', { 3, [](double a, double b) { return (long)a % (long)b; } } },
+        { '^', { 3, [](double a, double b) { return pow(a, b); } } },
         { '~', { 4, [](double _, double x) { return -x; }, TArithmeticOperator::Type::UnaryPrefix } },
         { '!', { 4, [](double x, double _) {
             const long lim = (long)x;
