@@ -10,7 +10,7 @@ const std::map<char, TArithmeticOperator> Operators::LIST = {
         { '!', { 4, [](double x, double _) {
             const long lim = (long)x;
             double res = 1;
-            for (int i=1; i <= lim; ++i)
+            for (long i = 1; i <= lim; ++i)
             {
                 res *= i;
             }
