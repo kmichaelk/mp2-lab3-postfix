@@ -24,6 +24,11 @@ public:
     static const std::map<char, TArithmeticOperator> LIST;
     static const std::map<std::string, std::shared_ptr<TArithmeticExpressionFunction>> STD_FUNCTIONS;
 
+    static bool supports_function(const std::string& name)
+    {
+        return STD_FUNCTIONS.find(name) != STD_FUNCTIONS.end();
+    }
+
     static int priority(const char c)
     {
         if (is_bracket(c)) return 0;

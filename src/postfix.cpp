@@ -3,7 +3,6 @@
 #include "lexeme.h"
 #include "operators.h"
 #include <algorithm>
-#include <cassert>
 
 TDynamicList<TLexeme> tokenize(const std::string& infix)
 {
@@ -75,6 +74,11 @@ TDynamicList<TLexeme> to_postfix(const TDynamicList<TLexeme>& lexemes)
                         stack.pop();
                     }
                     stack.pop();
+                    
+                    if (!stack.empty() && stack.top().type == TLexeme::Type::Function)
+                    {
+                        postfix.push_back(stack.pop_element());
+                    }
                 }
                 break;
             }
@@ -145,7 +149,10 @@ TArithmeticExpression::TArithmeticExpression(const std::string& infix)
 
         switch (token.type) {
             case TLexeme::Type::Function: {
-                func_names.push_back(token.value.as_string());
+                const std::string& name = token.value.as_string();
+                if (!Operators::supports_function(name)) {
+                    func_names.push_back(name);
+                }
                 break;
             }
             case TLexeme::Type::Variable: {
@@ -153,7 +160,10 @@ TArithmeticExpression::TArithmeticExpression(const std::string& infix)
                 break;
             }
             case TLexeme::Type::Number: {
-                assert(token.value.reinterpret_as_number() && "Failed to parse numeric token");
+                if (!token.value.reinterpret_as_number())
+                {
+                    throw parse_error("Failed to parse numeric token: " + token.value.as_string());
+                }
                 break;
             }
         }
