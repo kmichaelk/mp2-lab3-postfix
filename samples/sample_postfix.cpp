@@ -31,12 +31,20 @@ int main()
     cin >> infix;
     cout << endl;
 
-    TArithmeticExpression expr(infix);
-    cout << "Арифметическое выражение: " << expr.get_infix() << endl;
-    cout << "Постфиксная форма: '" << get_postfix_as_string(expr) << "'" << endl;
+
+    std::shared_ptr<TArithmeticExpression> expr;
+    try {
+        expr = std::make_shared<TArithmeticExpression>(infix);
+    } catch (const expression_validation_error& err)
+    {
+        cerr << "Ошибка в выражении: " << err.what() << " на позиции " << err.get_pos() << endl;
+        return EXIT_FAILURE;
+    }
+    cout << "Арифметическое выражение: " << expr->get_infix() << endl;
+    cout << "Постфиксная форма: '" << get_postfix_as_string(*expr) << "'" << endl;
     cout << endl;
 
-    auto variables = expr.get_variables();
+    auto variables = expr->get_variables();
     std::map<std::string, double> values;
     for (const auto& var : variables)
     {
@@ -44,18 +52,18 @@ int main()
         cin >> values[var];
     }
     //
-    auto func_names = expr.get_functions();
+    auto func_names = expr->get_functions();
     std::map<std::string, std::shared_ptr<TArithmeticExpressionFunction>> functions;
     for (const auto& fun : func_names)
     {
-        cout << " Введите формулу для '" << fun << "(x)': ";
+        cout << " Введите формулу для '" << fun << "'(x): ";
         cin >> infix;
         functions[fun] = std::make_shared<TExplicitArithmeticExpressionFunction>(TArithmeticExpression(infix));
     }
     cout << endl;
 
-    double res = expr.calculate(values, functions);
+    double res = expr->calculate(values, functions);
     cout << "Результат: " << res << endl;
 
-    return 0;
+    return EXIT_SUCCESS;
 }

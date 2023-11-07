@@ -150,3 +150,24 @@ TEST(TArithmeticExpression, can_handle_deep_unary_minus)
 
     EXPECT_EQ(3-3, result);
 }
+
+TEST(TArithmeticExpression, validator_detects_bad_opening_bracket)
+{
+    EXPECT_ANY_THROW(TArithmeticExpression expr("(1+1"));
+}
+
+TEST(TArithmeticExpression, validator_detects_bad_closing_bracket)
+{
+    EXPECT_ANY_THROW(TArithmeticExpression expr("1+1)"));
+}
+
+TEST(TArithmeticExpression, validator_detects_bad_operators)
+{
+    EXPECT_ANY_THROW(TArithmeticExpression expr("1++1"));
+}
+
+TEST(TArithmeticExpression, validator_detects_bad_numbers)
+{
+    EXPECT_ANY_THROW(TArithmeticExpression expr("1.+1"));
+    EXPECT_ANY_THROW(TArithmeticExpression expr("1.x+1"));
+}

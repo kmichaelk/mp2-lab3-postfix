@@ -2,6 +2,7 @@
 #include "stack.h"
 #include "lexeme.h"
 #include "operators.h"
+#include "validator.h"
 #include <algorithm>
 
 TDynamicList<TLexeme> tokenize(const std::string& infix)
@@ -40,7 +41,7 @@ TDynamicList<TLexeme> tokenize(const std::string& infix)
         }
 
         buf += c;
-        if (lex.type == TLexeme::Type::Number && !isdigit(c))
+        if (lex.type == TLexeme::Type::Number && (!isdigit(c) && c != '.'))
             lex.type = TLexeme::Type::Variable;
     }
     if (!buf.empty())
@@ -122,7 +123,7 @@ TDynamicList<TLexeme> to_postfix(const TDynamicList<TLexeme>& lexemes)
                 break;
             }
             default: {
-                throw parse_error("Unimplemented");
+                throw expression_parse_error("Unimplemented");
             }
         }
 
@@ -138,7 +139,7 @@ TDynamicList<TLexeme> to_postfix(const TDynamicList<TLexeme>& lexemes)
 }
 
 TArithmeticExpression::TArithmeticExpression(const std::string& infix)
-    : infix(infix)
+    : infix(validate_infix(infix))
     , tokens(to_postfix(tokenize(infix)))
 {
     //
@@ -164,7 +165,7 @@ TArithmeticExpression::TArithmeticExpression(const std::string& infix)
             case TLexeme::Type::Number: {
                 if (!token.value.reinterpret_as_number())
                 {
-                    throw parse_error("Failed to parse numeric token: " + token.value.as_string());
+                    throw expression_parse_error("Failed to parse numeric token: " + token.value.as_string());
                 }
                 break;
             }

@@ -9,13 +9,43 @@
 #include "lexeme.h"
 #include "list.h"
 
-class parse_error : public std::runtime_error
+class expression_parse_error : public std::runtime_error
 {
 public:
     explicit
-    parse_error(const std::string &message)
+    expression_parse_error(const std::string &message)
         : runtime_error(message)
     {}
+};
+class expression_validation_error : public std::runtime_error
+{
+public:
+    enum class cause
+    {
+        Generic,
+        BadNumber,
+        BadOperator,
+        MissingBracket,
+        ExtraBracket
+    };
+private:
+    cause m_cause;
+    size_t m_pos;
+public:
+    explicit
+    expression_validation_error(const std::string &message, size_t pos, cause _cause = cause::Generic)
+        : runtime_error(message)
+        , m_cause(_cause)
+        , m_pos(pos)
+    {}
+    cause get_cause() const
+    {
+        return m_cause;
+    }
+    size_t get_pos() const
+    {
+        return m_pos;
+    }
 };
 
 class TArithmeticExpressionFunction {
