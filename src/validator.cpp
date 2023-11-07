@@ -80,7 +80,6 @@ std::string& validate_infix(const std::string& infix)
             brackets.pop();
         }
 
-        auto fuck = c;
         switch (previous) {
             case ExpressionSymbol::Digit: {
                 if (current != ExpressionSymbol::Digit && current != ExpressionSymbol::Dot
