@@ -11,7 +11,9 @@ enum class ExpressionSymbol {
     Dot,
     Letter,
 
-    Bracket,
+    OpeningBracket,
+    ClosingBracket,
+
     Operator,
 
     Unknown
@@ -23,9 +25,13 @@ ExpressionSymbol get_type(const char c)
     {
         return ExpressionSymbol::Space;
     }
-    else if (Operators::is_bracket(c))
+    else if (c == '(')
     {
-        return ExpressionSymbol::Bracket;
+        return ExpressionSymbol::OpeningBracket;
+    }
+    else if (c == ')')
+    {
+        return ExpressionSymbol::ClosingBracket;
     }
     else if (Operators::is_operator(c))
     {
@@ -57,11 +63,14 @@ std::string& validate_infix(const std::string& infix)
     {
         ++i;
 
-        if (c == '(')
+        const ExpressionSymbol current = get_type(c);
+        assert(current != ExpressionSymbol::Unknown);
+
+        if (current == ExpressionSymbol::OpeningBracket)
         {
             brackets.push(i);
         }
-        else if (c == ')')
+        else if (current == ExpressionSymbol::ClosingBracket)
         {
             if (brackets.empty())
             {
@@ -70,9 +79,6 @@ std::string& validate_infix(const std::string& infix)
             }
             brackets.pop();
         }
-
-        ExpressionSymbol current = get_type(c);
-        assert(current != ExpressionSymbol::Unknown);
 
         auto fuck = c;
         switch (previous) {
@@ -94,7 +100,7 @@ std::string& validate_infix(const std::string& infix)
                 break;
             }
             case ExpressionSymbol::Operator: {
-                if (fuck == ')' || current == ExpressionSymbol::Operator)
+                if (current == ExpressionSymbol::ClosingBracket || current == ExpressionSymbol::Operator)
                 {
                     throw expression_validation_error("Malformed operator", i,
                                                       expression_validation_error::cause::BadOperator);
