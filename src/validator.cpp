@@ -5,6 +5,8 @@
 #include <cassert>
 
 enum class ExpressionSymbol {
+    Begin,
+
     Space,
 
     Digit,
@@ -54,7 +56,7 @@ ExpressionSymbol get_type(const char c)
 
 std::string& validate_infix(const std::string& infix)
 {
-    ExpressionSymbol previous = ExpressionSymbol::Space;
+    ExpressionSymbol previous = ExpressionSymbol::Begin;
 
     TStack<size_t> brackets;
 
@@ -81,6 +83,14 @@ std::string& validate_infix(const std::string& infix)
         }
 
         switch (previous) {
+            case ExpressionSymbol::Begin: {
+                if (current == ExpressionSymbol::Operator && c != '-')
+                {
+                    throw expression_validation_error("Unexpected operator", i,
+                                                      expression_validation_error::cause::BadOperator);
+                }
+                break;
+            }
             case ExpressionSymbol::Digit: {
                 if (current != ExpressionSymbol::Digit && current != ExpressionSymbol::Dot
                     && current != ExpressionSymbol::Operator && current != ExpressionSymbol::Space && c != ')')
@@ -109,6 +119,12 @@ std::string& validate_infix(const std::string& infix)
         }
 
         previous = current;
+    }
+
+    if (previous == ExpressionSymbol::Operator)
+    {
+        throw expression_validation_error("Useless operator at the end of the expression", i,
+                                          expression_validation_error::cause::BadOperator);
     }
 
     if (!brackets.empty())
