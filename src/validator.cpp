@@ -109,7 +109,7 @@ std::string& validate_infix(const std::string& infix)
                 break;
             }
             case ExpressionSymbol::Operator: {
-                if (current == ExpressionSymbol::ClosingBracket || current == ExpressionSymbol::Operator)
+                if ((i > 1 && infix[i - 2] != '!') && (current == ExpressionSymbol::ClosingBracket || current == ExpressionSymbol::Operator))
                 {
                     throw expression_validation_error("Malformed operator", i,
                                                       expression_validation_error::cause::BadOperator);
@@ -121,7 +121,7 @@ std::string& validate_infix(const std::string& infix)
         previous = current;
     }
 
-    if (previous == ExpressionSymbol::Operator)
+    if (previous == ExpressionSymbol::Operator && infix[i - 1] != '!')
     {
         throw expression_validation_error("Useless operator at the end of the expression", i,
                                           expression_validation_error::cause::BadOperator);
