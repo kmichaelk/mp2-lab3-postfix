@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <set>
 #include <functional>
 #include <memory>
 #include <map>
@@ -61,16 +62,16 @@ private:
 
     TDynamicList<TLexeme> tokens;
 
-    TDynamicList<std::string> variables;
-    TDynamicList<std::string> func_names;
+    std::set<std::string> variables;
+    std::set<std::string> func_names;
 public:
     explicit TArithmeticExpression(const std::string& infix);
 
     [[nodiscard]] std::string get_infix() const;
     [[nodiscard]] TDynamicList<std::string> get_postfix() const;
 
-    [[nodiscard]] TDynamicList<std::string> get_variables() const;
-    [[nodiscard]] TDynamicList<std::string> get_functions() const;
+    [[nodiscard]] std::set<std::string> get_variables() const;
+    [[nodiscard]] std::set<std::string> get_functions() const;
 
     [[nodiscard]]
     double calculate(

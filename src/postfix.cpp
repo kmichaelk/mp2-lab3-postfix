@@ -151,14 +151,14 @@ TArithmeticExpression::TArithmeticExpression(const std::string& infix)
             case TLexeme::Type::Function: {
                 const std::string& name = token.value.as_string();
                 if (!Operators::supports_function(name)) {
-                    func_names.push_back(name);
+                    func_names.insert(name);
                 }
                 break;
             }
             case TLexeme::Type::Variable: {
                 const std::string& name = token.value.as_string();
                 if (!Operators::has_constant(name)) {
-                    variables.push_back(name);
+                    variables.insert(name);
                 }
                 break;
             }
@@ -183,11 +183,11 @@ TDynamicList<std::string> TArithmeticExpression::get_postfix() const
     return postfix;
 }
 
-TDynamicList<std::string> TArithmeticExpression::get_variables() const
+std::set<std::string> TArithmeticExpression::get_variables() const
 {
     return variables;
 }
-TDynamicList<std::string> TArithmeticExpression::get_functions() const
+std::set<std::string> TArithmeticExpression::get_functions() const
 {
     return func_names;
 }
@@ -205,7 +205,7 @@ void left_join(const std::map<K, V> left, const std::map<K, V> right)
 }
 
 template<typename K, typename V>
-bool require_keys(const std::map<K, V>& map, const TDynamicList<K>& keys)
+bool require_keys(const std::map<K, V>& map, const std::set<K>& keys)
 {
     return std::all_of(keys.begin(), keys.end(), [&map](K key) { return map.find(key) != map.end(); });
 }
