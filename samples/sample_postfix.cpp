@@ -56,7 +56,7 @@ int main()
     std::map<std::string, std::shared_ptr<TArithmeticExpressionFunction>> functions;
     for (const auto& fun : func_names)
     {
-        cout << " Введите формулу для '" << fun << "'(x): ";
+        cout << " Введите формулу для '" << fun << "(x)': ";
         cin >> infix;
         functions[fun] = std::make_shared<TExplicitArithmeticExpressionFunction>(TArithmeticExpression(infix));
     }
